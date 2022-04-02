@@ -13,4 +13,4 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "MediaProject"
-include ':MakeMp4ByCamear'
+include ':01MakeMp4ByCamear'

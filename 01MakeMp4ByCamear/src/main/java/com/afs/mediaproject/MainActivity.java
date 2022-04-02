@@ -27,7 +27,6 @@ public class MainActivity extends AppCompatActivity implements Camera.PreviewCal
         mCameraHelper = new CameraHelper(640, 480);
         mCameraHelper.setPreviewCallback(this);
         mVideoCodec = new VideoCodec();
-
         mBtnRecord = findViewById(R.id.btn_record);
         mTextureView = findViewById(R.id.textureView);
         mTextureView.setSurfaceTextureListener(new TextureView.SurfaceTextureListener() {
