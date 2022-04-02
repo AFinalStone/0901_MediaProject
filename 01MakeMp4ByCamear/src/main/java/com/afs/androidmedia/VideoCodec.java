@@ -1,4 +1,4 @@
-package com.afs.mediaproject;
+package com.afs.androidmedia;
 
 import android.media.MediaCodec;
 import android.media.MediaCodecInfo;

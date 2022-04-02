@@ -1,4 +1,4 @@
-package com.afs.mediaproject;
+package com.afs.androidmedia;
 
 import android.graphics.ImageFormat;
 import android.graphics.SurfaceTexture;
@@ -8,7 +8,7 @@ import java.util.List;
 
 public class CameraHelper implements Camera.PreviewCallback {
 
-    public static final String TAG = "CameraHelper";
+    public static final String TAG = "CameraHelper=====";
     private int width;
     private int height;
     private int mCameraId;

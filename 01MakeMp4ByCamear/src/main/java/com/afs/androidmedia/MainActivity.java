@@ -1,10 +1,9 @@
-package com.afs.mediaproject;
+package com.afs.androidmedia;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
 import android.graphics.SurfaceTexture;
 import android.hardware.Camera;
-import android.os.Build;
 import android.os.Bundle;
 import android.view.TextureView;
 import android.view.View;
@@ -65,12 +64,11 @@ public class MainActivity extends AppCompatActivity implements Camera.PreviewCal
                 }
             }
         });
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-            String[] perms = {Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
-            if (checkSelfPermission(perms[0]) == PackageManager.PERMISSION_DENIED) {
-                requestPermissions(perms, 200);
-            }
+        String[] perms = {Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
+        if (checkSelfPermission(perms[0]) == PackageManager.PERMISSION_DENIED) {
+            requestPermissions(perms, 200);
         }
+
         mVideoCodec.getSupportType();
     }
 
