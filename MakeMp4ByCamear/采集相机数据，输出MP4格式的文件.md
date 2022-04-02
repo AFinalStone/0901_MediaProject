@@ -1,0 +1,19 @@
+## 一、SurfaceView和SurfaceTexture和SurfaceTexture的区别
+
+SurfaceView是一个View, 有自己对应的Window, 所以在WMS中有自己的WindowState, 在SurfaceFlinger中有自己的Layer.
+
+TextureView有自己的BufferQueue, 但是没有自己的Window, 所以他在WMS中并没有自己的WindowState, 也就是说它从属于App的View 树.
+但是它有自己的BufferQueue, View树中的其他View并不共用一个BufferQueue. TextureView必须支持硬件加速.
+
+SurfaceTexture并不是一个View, 它有自己的BufferQueue, 并且可以用来生成Surface, 传入到SurfaceTexture中的Buffer会被转化为GL纹理,
+然后可以把这个纹理交给TextureView或者GLSurfaceView进行显示(纹理只是一堆数据, 必须附加到View上才能被展示)
+
+Android
+5.0中将BufferQueue的核心功能分离出来，放在BufferQueueCore这个类中。BufferQueueProducer和BufferQueueConsumer分别是它的生产者和消费者实现基类（分别实现了IGraphicBufferProducer和IGraphicBufferConsumer接口）。它们都是由BufferQueue的静态[函数])
+createBufferQueue()
+来创建的。Surface是生产者端的实现类，提供dequeueBuffer/queueBuffer等硬件渲染接口，和lockCanvas/unlockCanvasAndPost等软件渲染接口，使内容流的源可以往BufferQueue中填graphic
+buffer。GLConsumer继承自ConsumerBase，是消费者端的实现类。它在基类的基础上添加了GL相关的操作，如将graphic buffer中的内容转为GL纹理等操作.
+
+## 二、项目报错
+
+[Error 0xfffffc03 at android.media.MediaCodec.native_configure(Native Method)报错](https://www.jianshu.com/p/e2145fb02cb7)
