@@ -1,11 +1,16 @@
 package com.afs.androidcamera;
 
 import android.app.Activity;
+import android.graphics.ImageFormat;
 import android.hardware.Camera;
+import android.util.Log;
 import android.view.Surface;
 import android.view.SurfaceHolder;
 
+import java.util.List;
+
 public class CameraHelper {
+    public static final String TAG = "CameraHelper======";
 
     private Activity mActivity;
     //后置摄像头信息
@@ -79,11 +84,23 @@ public class CameraHelper {
         }
     }
 
+    /**
+     * 开始预览
+     *
+     * @param surfaceHolder
+     */
     public void startPreview(SurfaceHolder surfaceHolder) {
         try {
             mSurfaceHolder = surfaceHolder;
             //设置实时预览
             mCamera.setPreviewDisplay(mSurfaceHolder);
+            //这里可以设置监听预览数据的回调，一般返回的是YUV格式中类型为NV21的图像数据
+            mCamera.setPreviewCallback(new Camera.PreviewCallback() {
+                @Override
+                public void onPreviewFrame(byte[] data, Camera camera) {
+                    Log.d(TAG, "预览图像字节码长度: " + data.length);
+                }
+            });
             //Orientation
             // 设置相机方向
             mCamera.setDisplayOrientation(getCameraDisplayOrientation());
@@ -94,18 +111,59 @@ public class CameraHelper {
         }
     }
 
+    /**
+     * 停止预览
+     */
     public void stopPreview() {
         if (mCamera != null) {
             mCamera.stopPreview();
         }
     }
 
+    /**
+     * 释放相机资源
+     */
     public void releaseCamera() {
         if (mCamera != null) {
             mCamera.stopPreview();
+            mCamera.stopFaceDetection();
+            mCamera.setPreviewCallback(null);
             mCamera.release();
             mCamera = null;
         }
+    }
+
+    /**
+     * 设置相机参数
+     */
+    public void setCameraParameters() {
+        if (null == mCamera) {
+            return;
+        }
+        Camera.Parameters parameters = mCamera.getParameters();
+        parameters.setPreviewFormat(ImageFormat.NV21); //default
+
+        if (isSupportFocus(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE)) {
+            parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
+        } else if (isSupportFocus(Camera.Parameters.FOCUS_MODE_AUTO)) {
+            parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
+        }
+
+        //设置预览图片大小
+//        parameters.setPreviewSize(int width, int height);
+        //设置图片大小
+//        parameters.setPictureSize(int width, int height);
+
+        mCamera.setParameters(parameters);
+    }
+
+    private boolean isSupportFocus(String focusModel) {
+        if (mCamera != null) {
+            Camera.Parameters parameters = mCamera.getParameters();
+            List<String> supportList = parameters.getSupportedFocusModes();
+            return supportList.contains(focusModel);
+        }
+        return false;
     }
 
     private int getCameraDisplayOrientation() {
