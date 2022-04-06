@@ -1,4 +1,4 @@
-package com.afs.androidcamera;
+package com.afs.androidcamera1;
 
 import android.app.Activity;
 import android.graphics.ImageFormat;
@@ -9,8 +9,8 @@ import android.view.SurfaceHolder;
 
 import java.util.List;
 
-public class CameraHelper {
-    public static final String TAG = "CameraHelper======";
+public class Camera1Impl implements ICamera {
+    public static final String TAG = "Camera1Impl======";
 
     private Activity mActivity;
     //后置摄像头信息
@@ -24,7 +24,7 @@ public class CameraHelper {
     private Camera.CameraInfo mCameraInfo;
     private SurfaceHolder mSurfaceHolder;
 
-    public CameraHelper(Activity activity) {
+    public Camera1Impl(Activity activity) {
         this.mActivity = activity;
         initCameraInfo();
     }
@@ -98,7 +98,7 @@ public class CameraHelper {
             mCamera.setPreviewCallback(new Camera.PreviewCallback() {
                 @Override
                 public void onPreviewFrame(byte[] data, Camera camera) {
-                    Log.d(TAG, "预览图像字节码长度: " + data.length);
+                    Log.d(TAG, "预览图像数据长度: " + data.length);
                 }
             });
             //Orientation
@@ -108,6 +108,31 @@ public class CameraHelper {
             mCamera.startPreview();
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    /**
+     * 拍照
+     */
+    public void takePicture() {
+        if (null != mCamera) {
+            mCamera.takePicture(new Camera.ShutterCallback() {
+                @Override
+                public void onShutter() {
+                    Log.d(TAG, "onShutter快门按下后的回调=====");
+                }
+            }, new Camera.PictureCallback() {
+                @Override
+                public void onPictureTaken(byte[] data, Camera camera) {
+                    Log.d(TAG, "onPictureTaken回调=====raw图像数据长度：" + (data == null ? 0 : data.length));
+                }
+            }, new Camera.PictureCallback() {
+                @Override
+                public void onPictureTaken(final byte[] data, Camera camera) {
+                    mCamera.startPreview();
+                    Log.d(TAG, "onPictureTaken回调=====jpeg图像生成以后的回调" + (data == null ? 0 : data.length));
+                }
+            });
         }
     }
 

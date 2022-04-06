@@ -239,32 +239,43 @@ ImageFormat.JPEG
 ## 四、拍照
 
 ```c
-private void takePicture() {
-    if (null != mCamera) {
-        mCamera.takePicture(new Camera.ShutterCallback() {
-            @Override
-            public void onShutter() {
-
-            }
-        }, new Camera.PictureCallback() {
-            @Override
-            public void onPictureTaken(byte[] data, Camera camera) {
-                //base data
-            }
-        }, new Camera.PictureCallback() {
-            @Override
-            public void onPictureTaken(final byte[] data, Camera camera) {
-                mCamera.startPreview();
-                //save data
-            }
-        });
+    /**
+     * 拍照
+     */
+    public void takePicture() {
+        if (null != mCamera) {
+            mCamera.takePicture(new Camera.ShutterCallback() {
+                @Override
+                public void onShutter() {
+                    Log.d(TAG, "onShutter快门按下后的回调=====");
+                }
+            }, new Camera.PictureCallback() {
+                @Override
+                public void onPictureTaken(byte[] data, Camera camera) {
+                    Log.d(TAG, "onPictureTaken回调=====raw图像数据长度：" + (data == null ? 0 : data.length));
+                }
+            }, new Camera.PictureCallback() {
+                @Override
+                public void onPictureTaken(final byte[] data, Camera camera) {
+                    mCamera.startPreview();
+                    Log.d(TAG, "onPictureTaken回调=====jpeg图像生成以后的回调" + (data == null ? 0 : data.length));
+                }
+            });
+        }
     }
-}
 ```
 
 - shutter(ShutterCallback)：快门按下后的回调
 - raw(PictureCallback)：raw图像数据
 - jpeg(PictureCallback)：jpeg图像生成以后的回调
+
+测试日志信息:
+
+```cmd
+2022-04-06 11:19:50.519 16927-16927/com.afs.androidcamera1 D/Camera1Impl======: onShutter快门按下后的回调=====
+2022-04-06 11:19:50.519 16927-16927/com.afs.androidcamera1 D/Camera1Impl======: onPictureTaken回调=====raw图像数据长度：0
+2022-04-06 11:19:50.585 16927-16927/com.afs.androidcamera1 D/Camera1Impl======: onPictureTaken回调=====jpeg图像生成以后的回调1124849
+```
 
 ## 五、释放相机资源
 
@@ -291,7 +302,7 @@ private void releaseCamera() {
 public class MainActivity extends AppCompatActivity {
     public static final String TAG = "MainActivity======";
 
-    private CameraHelper mCameraHelper;
+    private ICamera mCameraHelper;
     private SurfaceView mSurfaceView;
     private Button mBtnOpenCamera;
 
@@ -300,7 +311,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initView();
-        mCameraHelper = new CameraHelper(this);
+        mCameraHelper = new Camera1Impl(this);
         openCamera();
         String[] perms = {Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
         if (checkSelfPermission(perms[0]) == PackageManager.PERMISSION_DENIED) {
@@ -333,6 +344,12 @@ public class MainActivity extends AppCompatActivity {
                 mSurfaceView.setVisibility(View.VISIBLE);
             }
         });
+        findViewById(R.id.btn_take_picture).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                mCameraHelper.takePicture();
+            }
+        });
         SurfaceHolder surfaceHolder = mSurfaceView.getHolder();
         surfaceHolder.addCallback(new SurfaceHolder.Callback() {
             @Override
@@ -356,6 +373,14 @@ public class MainActivity extends AppCompatActivity {
 
 
     @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 200) {
+            openCamera();
+        }
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         mCameraHelper.releaseCamera();
@@ -372,7 +397,58 @@ public class MainActivity extends AppCompatActivity {
 ```
 
 ```java
-public class CameraHelper {
+public interface ICamera {
+
+    int getBackCameraId();
+
+    int getFrontCameraId();
+
+    /**
+     * 打开相机
+     *
+     * @param cameraId
+     */
+    void openCamera(int cameraId);
+
+    /**
+     * 切换相机
+     */
+    void switchCamera();
+
+    /**
+     * 开始预览
+     *
+     * @param surfaceHolder
+     */
+    void startPreview(SurfaceHolder surfaceHolder);
+
+    /**
+     * 拍照
+     */
+    void takePicture();
+
+    /**
+     * 停止预览
+     */
+    void stopPreview();
+
+    /**
+     * 释放相机资源
+     */
+    void releaseCamera();
+
+    /**
+     * 设置相机参数
+     */
+    void setCameraParameters();
+
+
+}
+```
+
+```java
+public class Camera1Impl implements ICamera {
+    public static final String TAG = "Camera1Impl======";
 
     private Activity mActivity;
     //后置摄像头信息
@@ -386,7 +462,7 @@ public class CameraHelper {
     private Camera.CameraInfo mCameraInfo;
     private SurfaceHolder mSurfaceHolder;
 
-    public CameraHelper(Activity activity) {
+    public Camera1Impl(Activity activity) {
         this.mActivity = activity;
         initCameraInfo();
     }
@@ -460,7 +536,7 @@ public class CameraHelper {
             mCamera.setPreviewCallback(new Camera.PreviewCallback() {
                 @Override
                 public void onPreviewFrame(byte[] data, Camera camera) {
-
+                    Log.d(TAG, "预览图像数据长度: " + data.length);
                 }
             });
             //Orientation
@@ -470,6 +546,31 @@ public class CameraHelper {
             mCamera.startPreview();
         } catch (Exception e) {
             e.printStackTrace();
+        }
+    }
+
+    /**
+     * 拍照
+     */
+    public void takePicture() {
+        if (null != mCamera) {
+            mCamera.takePicture(new Camera.ShutterCallback() {
+                @Override
+                public void onShutter() {
+                    Log.d(TAG, "onShutter快门按下后的回调=====");
+                }
+            }, new Camera.PictureCallback() {
+                @Override
+                public void onPictureTaken(byte[] data, Camera camera) {
+                    Log.d(TAG, "onPictureTaken回调=====raw图像数据长度：" + (data == null ? 0 : data.length));
+                }
+            }, new Camera.PictureCallback() {
+                @Override
+                public void onPictureTaken(final byte[] data, Camera camera) {
+                    mCamera.startPreview();
+                    Log.d(TAG, "onPictureTaken回调=====jpeg图像生成以后的回调" + (data == null ? 0 : data.length));
+                }
+            });
         }
     }
 
@@ -562,3 +663,6 @@ public class CameraHelper {
 }
 ```
 
+参考文章:
+[Android Camera1 教程 · 第一章 · 开启相机](https://www.jianshu.com/p/3440d82545f6)
+[Android Camera1 教程 · 第二章 · 预览](https://www.jianshu.com/p/705d4792e836)

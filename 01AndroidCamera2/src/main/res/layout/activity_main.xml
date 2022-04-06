@@ -29,11 +29,5 @@
             android:layout_height="wrap_content"
             android:text="切换相机" />
 
-        <Button
-            android:id="@+id/btn_take_picture"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="拍照" />
-
     </LinearLayout>
 </RelativeLayout>

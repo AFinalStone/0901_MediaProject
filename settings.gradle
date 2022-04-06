@@ -15,3 +15,4 @@ dependencyResolutionManagement {
 rootProject.name = "MediaProject"
 include ':01MakeMp4ByCamear'
 include ':00AndroidCamera'
+include ':01AndroidCamera2'
