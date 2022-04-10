@@ -12,25 +12,11 @@
         android:layout_height="match_parent"
         android:visibility="invisible" />
 
-<<<<<<< HEAD
-    <Button
-        android:id="@+id/btn_open_camera"
-        android:layout_width="100dp"
-=======
     <LinearLayout
         android:layout_width="wrap_content"
->>>>>>> 627090dfee8f22e9ddd21f8918de3c9a407b173e
         android:layout_height="wrap_content"
         android:orientation="vertical">
 
-<<<<<<< HEAD
-    <Button
-        android:id="@+id/btn_switch_camera"
-        android:layout_width="300px"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="100dp"
-        android:text="切换相机" />
-=======
         <Button
             android:id="@+id/btn_open_camera"
             android:layout_width="wrap_content"
@@ -43,12 +29,5 @@
             android:layout_height="wrap_content"
             android:text="切换相机" />
 
-        <Button
-            android:id="@+id/btn_take_picture"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="拍照" />
-
     </LinearLayout>
->>>>>>> 627090dfee8f22e9ddd21f8918de3c9a407b173e
 </RelativeLayout>

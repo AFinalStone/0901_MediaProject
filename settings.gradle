@@ -16,3 +16,4 @@ rootProject.name = "MediaProject"
 include ':01MakeMp4ByCamear'
 include ':00AndroidCamera'
 include ':0101_Bitmap'
+include ':01AndroidCamera2'

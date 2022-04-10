@@ -6,7 +6,7 @@ android {
     compileSdk 28
 
     defaultConfig {
-        applicationId "com.afs.androidcamera"
+        applicationId "com.afs.androidcamera1"
         minSdk 23
         targetSdk 28
         versionCode 1

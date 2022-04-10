@@ -1,4 +1,4 @@
-package com.afs.androidcamera;
+package com.afs.androidcamera2;
 
 import android.Manifest;
 import android.content.pm.PackageManager;
@@ -9,13 +9,14 @@ import android.view.SurfaceView;
 import android.view.View;
 import android.widget.Button;
 
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.content.ContextCompat;
 
 public class MainActivity extends AppCompatActivity {
     public static final String TAG = "MainActivity======";
 
-    private CameraHelper mCameraHelper;
+    private ICamera mCameraHelper;
     private SurfaceView mSurfaceView;
     private Button mBtnOpenCamera;
 
@@ -24,7 +25,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         initView();
-        mCameraHelper = new CameraHelper(this);
+//        mCameraHelper = new CameraHelper(this);
         openCamera();
         String[] perms = {Manifest.permission.CAMERA, Manifest.permission.WRITE_EXTERNAL_STORAGE};
         if (checkSelfPermission(perms[0]) == PackageManager.PERMISSION_DENIED) {
@@ -80,6 +81,14 @@ public class MainActivity extends AppCompatActivity {
 
 
     @Override
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults);
+        if (requestCode == 200) {
+            openCamera();
+        }
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         mCameraHelper.releaseCamera();
@@ -90,6 +99,6 @@ public class MainActivity extends AppCompatActivity {
             mCameraHelper.openCamera(mCameraHelper.getFrontCameraId());
         }
     }
-
-
 }
+
+

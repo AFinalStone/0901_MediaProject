@@ -7,13 +7,32 @@
     tools:context=".MainActivity">
 
     <Button
+        android:id="@+id/btn_load_image_shake"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="加载图片_内存抖动" />
+
+    <Button
         android:id="@+id/btn_load_image"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="加载图片" />
+        android:text="加载图片_RGB888" />
+
+    <Button
+        android:id="@+id/btn_load_image_compress"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="加载图片_带压缩RGB565" />
 
     <ImageView
         android:id="@+id/image01"
-        android:layout_width="100dp"
-        android:layout_height="100dp" />
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/background_dark" />
+
+    <ImageView
+        android:id="@+id/image02"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@android:color/background_dark" />
 </LinearLayout>
