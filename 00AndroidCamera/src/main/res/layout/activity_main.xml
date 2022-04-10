@@ -14,14 +14,14 @@
 
     <Button
         android:id="@+id/btn_open_camera"
-        android:layout_width="wrap_content"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
         android:text="打开相机" />
 
     <Button
         android:id="@+id/btn_switch_camera"
-        android:layout_width="wrap_content"
+        android:layout_width="300px"
         android:layout_height="wrap_content"
-        android:layout_alignParentRight="true"
+        android:layout_marginTop="100dp"
         android:text="切换相机" />
 </RelativeLayout>
