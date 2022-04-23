@@ -13,7 +13,8 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "MediaProject"
-include ':01MakeMp4ByCamear'
-include ':00AndroidCamera'
-include ':0101_Bitmap'
-include ':01AndroidCamera2'
+include ':0301MakeMp4ByCamear'
+include ':0101AndroidCamera'
+include ':0201_Bitmap'
+include ':0102AndroidCamera2'
+include ':0401OpenGL'
