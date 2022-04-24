@@ -12,7 +12,7 @@ dependencyResolutionManagement {
         mavenCentral()
     }
 }
-rootProject.name = "MediaProject"
+rootProject.name = "Android0501_MediaProject"
 include ':0301MakeMp4ByCamear'
 include ':0101AndroidCamera'
 include ':0201_Bitmap'
