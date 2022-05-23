@@ -1,18 +1,4 @@
-pluginManagement {
-    repositories {
-        gradlePluginPortal()
-        google()
-        mavenCentral()
-    }
-}
-dependencyResolutionManagement {
-    repositoriesMode.set(RepositoriesMode.FAIL_ON_PROJECT_REPOS)
-    repositories {
-        google()
-        mavenCentral()
-    }
-}
-rootProject.name = "Android0501_MediaProject"
+rootProject.name = "Android0901_MediaProject"
 include ':0301MakeMp4ByCamear'
 include ':0101AndroidCamera'
 include ':0201_Bitmap'
